@@ -34,6 +34,7 @@ class Product:
                     other.price * other.quantity)
         raise TypeError("Сложение возможно только с другим объектом Product")
 
+
 class Category:
     category_count = 0
     product_count = 0
