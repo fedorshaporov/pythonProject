@@ -66,5 +66,6 @@ class TestProductCategory(unittest.TestCase):
         self.assertEqual(len(category.products), 2)  # Должно быть 2
         self.assertEqual(Category.product_count, 2)  # Должно быть 2
 
+
 if __name__ == '__main__':
     unittest.main()

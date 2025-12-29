@@ -34,6 +34,7 @@ class Product:
             product_info['quantity']
         )
 
+
 class Category:
     category_count = 0  # Счетчик категорий
     product_count = 0   # Счетчик продуктов
@@ -54,6 +55,7 @@ class Category:
     def products(self) -> str:
         """Возвращает строку со всеми продуктами в категории."""
         return "".join(
-            f"{product.name}, {product.price:.2f} руб. Остаток: {product.quantity} шт.\n"
+            f"{product.name}, {product.price:.2f} руб. "
+            f"Остаток: {product.quantity} шт.\n"
             for product in self.__products
         )
