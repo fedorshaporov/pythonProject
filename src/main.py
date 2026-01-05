@@ -1,5 +1,4 @@
 from src.product import Smartphone, LawnGrass
-# Убедитесь, что здесь правильные импорты
 from src.category import Category
 
 # Создаем категории
