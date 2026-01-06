@@ -1,71 +1,55 @@
-import unittest
+import pytest
+from src.main import Product, Category, Smartphone, LawnGrass
 
-class Product:
-    def __init__(self, name: str, description: str, price: float, quantity: int):
-        self.name = name
-        self.description = description
-        self.price = price
-        self.quantity = quantity
+def test_product_creation():
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    assert product.name == "Товар"
+    assert product.description == "Описание товара"
+    assert product.price == 100.0
+    assert product.quantity == 10
 
+def test_smartphone_creation():
+    smartphone = Smartphone("Смартфон", "Современный смартфон", 25000, 15, 8, "Model X", 256, "черный")
+    assert smartphone.name == "Смартфон"
+    assert smartphone.description == "Современный смартфон"
+    assert smartphone.price == 25000
+    assert smartphone.quantity == 15
+    assert smartphone.efficiency == 8
+    assert smartphone.model == "Model X"
+    assert smartphone.memory == 256
+    assert smartphone.color == "черный"
 
-class Category:
-    category_count = 0
-    product_count = 0
+def test_lawn_grass_creation():
+    grass = LawnGrass("Груша газонная", "Газонная трава", 1500, 30, "Россия", 14, "зеленый")
+    assert grass.name == "Груша газонная"
+    assert grass.description == "Газонная трава"
+    assert grass.price == 1500
+    assert grass.quantity == 30
+    assert grass.country == "Россия"
+    assert grass.germination_period == 14
+    assert grass.color == "зеленый"
 
+def test_category_add_product():
+    category = Category("Электроника", "Электронные устройства")
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    category.add_product(product)
+    assert len(category._products) == 1
+    assert category._products[0] == product
 
-    def __init__(self, name: str, description: str):
-        self.name = name
-        self.description = description
-        self.products = []
-        Category.category_count += 1
+def test_category_add_invalid_product():
+    category = Category("Электроника", "Электронные устройства")
+    with pytest.raises(TypeError):
+        category.add_product("Некорректный объект")
 
+def test_product_addition_and_sum():
+    smartphone1 = Smartphone("Смартфон 1", "Описание 1", 20000, 5, 5, "Model X1", 128, "синий")
+    smartphone2 = Smartphone("Смартфон 2", "Описание 2", 25000, 2, 8, "Model X2", 256, "черный")
+    total_value = smartphone1 + smartphone2
+    expected_value = (smartphone1.price * smartphone1.quantity) + (smartphone2.price * smartphone2.quantity)
+    assert total_value == expected_value
 
-    def add_product(self, product: Product):
-        self.products.append(product)
-        Category.product_count += 1
-
-
-class TestProductCategory(unittest.TestCase):
-
-
-    def setUp(self):
-        # Сбросить подсчеты перед каждым тестом
-        Category.category_count = 0
-        Category.product_count = 0
-
-
-    def test_product_initialization(self):
-        product = Product("Laptop", "A powerful laptop", 999.99, 10)
-        self.assertEqual(product.name, "Laptop")
-        self.assertEqual(product.description, "A powerful laptop")
-        self.assertEqual(product.price, 999.99)
-        self.assertEqual(product.quantity, 10)
-
-
-    def test_category_initialization(self):
-        category = Category("Electronics", "Devices and gadgets")
-        self.assertEqual(category.name, "Electronics")
-        self.assertEqual(category.description, "Devices and gadgets")
-        self.assertEqual(len(category.products), 0)
-        self.assertEqual(Category.category_count, 1)  # Должно быть 1
-
-
-    def test_add_product_to_category(self):
-        category = Category("Electronics", "Devices and gadgets")
-        product = Product("Smartphone", "Latest model smartphone", 499.99, 5)
-        category.add_product(product)
-
-        self.assertEqual(len(category.products), 1)
-        self.assertEqual(category.products[0].name, "Smartphone")
-        self.assertEqual(Category.product_count, 1)  # Должно быть 1
-
-        # Добавление еще одного продукта
-        product2 = Product("Headphones", "Wireless headphones", 199.99, 15)
-        category.add_product(product2)
-
-        self.assertEqual(len(category.products), 2)  # Должно быть 2
-        self.assertEqual(Category.product_count, 2)  # Должно быть 2
-
-
-if __name__ == '__main__':
-    unittest.main()
+def test_product_addition_type_error():
+    smartphone = Smartphone("Смартфон", "Описание", 20000, 5, 5, "Model X", 128, "синий")
+    grass = LawnGrass("Газонная трава", "Описание", 1500, 30, "Россия", 14, "зеленый")
+    with pytest.raises(TypeError):
+        smartphone + grass  # Ожидаем ошибку при сложении разных типов
