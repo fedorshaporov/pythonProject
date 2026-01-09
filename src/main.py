@@ -1,9 +1,8 @@
 class Product:
-    def __init__(self, name: str, description: str,
-                 price: float, quantity: int):
+    def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
-        self._price = price
+        self._price = price  # Приватный атрибут
         self.quantity = quantity
 
     @property
@@ -21,7 +20,6 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        # Проверка, является ли другой объект тем же типом (или наследником)
         if not isinstance(other, self.__class__):
             raise TypeError("Можно складывать только товары одного типа.")
         return self.price * self.quantity + other.price * other.quantity
@@ -29,8 +27,7 @@ class Product:
 
 class Smartphone(Product):
     def __init__(self, name: str, description: str, price: float,
-                 quantity: int,
-                 efficiency: float, model: str, memory: int, color: str):
+                 quantity: int, efficiency: float, model: str, memory: int, color: str):
         super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
@@ -40,8 +37,7 @@ class Smartphone(Product):
 
 class LawnGrass(Product):
     def __init__(self, name: str, description: str, price: float,
-                 quantity: int,
-                 country: str, germination_period: int, color: str):
+                 quantity: int, country: str, germination_period: int, color: str):
         super().__init__(name, description, price, quantity)
         self.country = country
         self.germination_period = germination_period
@@ -56,15 +52,12 @@ class Category:
 
     def add_product(self, product: Product):
         if not isinstance(product, Product):
-            raise TypeError(
-                "Можно добавлять только объекты классов Product "
-                "или его наследников."
-            )
+            raise TypeError("Можно добавлять только объекты классов Product или его наследников.")
         self._products.append(product)
 
     @property
     def products(self):
-        return ''.join(str(product) for product in self._products)
+        return '\n'.join(str(product) for product in self._products)
 
     def __str__(self):
         total_quantity = sum(product.quantity for product in self._products)
@@ -73,23 +66,37 @@ class Category:
 
 # Пример использования - тестирование создания объектов
 if __name__ == "__main__":
-    electronics = Category("Электроника", "Электронные устройства")
-    lawn_care = Category("Уход за газоном", "Товары для ухода за газоном")
+    smartphone1 = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
+                             "S23 Ultra", 256, "Серый")
+    smartphone2 = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space")
+    smartphone3 = Smartphone("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14, 90.3, "Note 11", 1024, "Синий")
 
-    smartphone = Smartphone(
-        "Смартфон", "Современный смартфон", 25000, 15, 8,
-        "Model X", 256, "черный"
-    )
-    grass = LawnGrass(
-        "Груша газонная", "Газонная трава", 1500, 30,
-        "Россия", 14, "зеленый"
-    )
+    grass1 = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", 7, "Зеленый")
+    grass2 = LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 15, "США", 5, "Темно-зеленый")
 
-    electronics.add_product(smartphone)
-    lawn_care.add_product(grass)
+    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны")
+    category_grass = Category("Газонная трава", "Различные виды газонной травы")
 
-    print(electronics.products)
-    print(lawn_care.products)
+    category_smartphones.add_product(smartphone1)
+    category_smartphones.add_product(smartphone2)
+    category_smartphones.add_product(smartphone3)
+
+    category_grass.add_product(grass1)
+    category_grass.add_product(grass2)
+
+    print(category_smartphones.products)
+    print(category_grass.products)
 
     # Проверка сложения
-    print(smartphone + smartphone)  # Сложение двух смартфонов
+    smartphone_sum = smartphone1 + smartphone2
+    print(smartphone_sum)
+
+    grass_sum = grass1 + grass2
+    print(grass_sum)
+
+    try:
+        invalid_sum = smartphone1 + grass1
+    except TypeError:
+        print("Возникла ошибка TypeError при попытке сложения")
+    else:
+        print("Не возникла ошибка TypeError при попытке сложения")
