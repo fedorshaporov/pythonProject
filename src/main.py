@@ -45,15 +45,20 @@ class LawnGrass(Product):
 
 
 class Category:
+    category_count = 0  # Класс-атрибут для хранения количества категорий
+    product_count = 0   # Класс-атрибут для хранения общего количества продуктов
+
     def __init__(self, name: str, description: str, products: list = None):
         self.name = name
         self.description = description
-        self._products = products if products is not None else []  # Инициализация списка продуктов
+        self._products = products if products is not None else []
+        Category.category_count += 1  # Увеличиваем количество категорий при создании новой
 
     def add_product(self, product: Product):
         if not isinstance(product, Product):
             raise TypeError("Можно добавлять только объекты классов Product или его наследников.")
         self._products.append(product)
+        Category.product_count += 1  # Увеличиваем количество продуктов при добавлении
 
     @property
     def products(self):
@@ -73,9 +78,21 @@ if __name__ == "__main__":
     grass1 = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", 7, "Зеленый")
     grass2 = LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 15, "США", 5, "Темно-зеленый")
 
-    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны", [smartphone1, smartphone2])
-    category_grass = Category("Газонная трава", "Различные виды газонной травы", [grass1, grass2])
+    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны")
+    category_grass = Category("Газонная трава", "Различные виды газонной травы")
 
+    category_smartphones.add_product(smartphone1)
+    category_smartphones.add_product(smartphone2)
+    category_smartphones.add_product(smartphone3)
+
+    category_grass.add_product(grass1)
+    category_grass.add_product(grass2)
+
+    # Вывод общего количества категорий и продуктов
+    print(f"Общее количество категорий: {Category.category_count}")
+    print(f"Общее количество продуктов: {Category.product_count}")
+
+    # Вывод продуктов в категориях
     print(category_smartphones.products)
     print(category_grass.products)
 
