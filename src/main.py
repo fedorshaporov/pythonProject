@@ -45,10 +45,10 @@ class LawnGrass(Product):
 
 
 class Category:
-    def __init__(self, name: str, description: str):
+    def __init__(self, name: str, description: str, products: list = None):
         self.name = name
         self.description = description
-        self._products = []  # Приватный атрибут
+        self._products = products if products is not None else []  # Инициализация списка продуктов
 
     def add_product(self, product: Product):
         if not isinstance(product, Product):
@@ -64,7 +64,6 @@ class Category:
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
 
-# Пример использования - тестирование создания объектов
 if __name__ == "__main__":
     smartphone1 = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
                              "S23 Ultra", 256, "Серый")
@@ -74,15 +73,8 @@ if __name__ == "__main__":
     grass1 = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", 7, "Зеленый")
     grass2 = LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 15, "США", 5, "Темно-зеленый")
 
-    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны")
-    category_grass = Category("Газонная трава", "Различные виды газонной травы")
-
-    category_smartphones.add_product(smartphone1)
-    category_smartphones.add_product(smartphone2)
-    category_smartphones.add_product(smartphone3)
-
-    category_grass.add_product(grass1)
-    category_grass.add_product(grass2)
+    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны", [smartphone1, smartphone2])
+    category_grass = Category("Газонная трава", "Различные виды газонной травы", [grass1, grass2])
 
     print(category_smartphones.products)
     print(category_grass.products)
@@ -98,5 +90,8 @@ if __name__ == "__main__":
         invalid_sum = smartphone1 + grass1
     except TypeError:
         print("Возникла ошибка TypeError при попытке сложения")
-    else:
-        print("Не возникла ошибка TypeError при попытке сложения")
+
+    try:
+        category_smartphones.add_product("Not a product")
+    except TypeError:
+        print("Возникла ошибка TypeError при добавлении не продукта")
