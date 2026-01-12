@@ -20,7 +20,7 @@ class Product(BaseProduct, LoggingMixin):
         self.name = name
         self.description = description
         self._price = price  # Приватный атрибут
-        self.quantity = quantity
+        self.quantity = quantity  # Будем использовать сеттер
 
     @property
     def price(self):
@@ -32,6 +32,17 @@ class Product(BaseProduct, LoggingMixin):
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self._price = value
+
+    @property
+    def quantity(self):
+        return self._quantity
+
+    @quantity.setter
+    def quantity(self, value: int):
+        if value < 0:
+            print("Количество не должно быть отрицательным")
+        else:
+            self._quantity = value
 
     def __str__(self):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."

@@ -1,5 +1,5 @@
 import pytest
-from src.main import Product, Smartphone, LawnGrass, Category
+from src.main import Product, Smartphone, LawnGrass, Category  # Убедитесь, что путь верный
 
 def test_product_creation():
     product = Product("Товар", "Описание товара", 100.0, 10)
@@ -8,6 +8,52 @@ def test_product_creation():
     assert product.price == 100.0
     assert product.quantity == 10
 
+# Добавляем новые тесты
+def test_product_price_update():
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    product.price = 150.0  # Обновляем цену
+    assert product.price == 150.0  # Проверяем, что цена обновилась
+
+def test_product_quantity_update():
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    product.quantity = 20  # Обновляем количество
+    assert product.quantity == 20  # Проверяем, что количество обновилось
+
+def test_product_quantity_update_invalid():
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    product.quantity = -5  # Устанавливаем отрицательное количество
+    assert product.quantity == 10  # Проверяем, что количество не изменилось
+
+def test_category_total_products():
+    category = Category("Тестовая категория", "Тестовое описание")
+    product1 = Product("Товар 1", "Описание товара 1", 100.0, 5)
+    product2 = Product("Товар 2", "Описание товара 2", 200.0, 3)
+    category.add_product(product1)
+    category.add_product(product2)
+
+    total_quantity = sum(product.quantity for product in category._products)
+    assert total_quantity == 8  # Проверяем общее количество продуктов в категории
+
+def test_category_str_method():
+    category = Category("Устройства", "Разные устройства")
+    product1 = Product("Смартфон", "Описание смартфона", 10000, 5)
+    product2 = Product("Планшет", "Описание планшета", 15000, 3)
+    category.add_product(product1)
+    category.add_product(product2)
+
+    expected_str = "Устройства, количество продуктов: 8 шт."
+    assert str(category) == expected_str  # Проверяем строковое представление категории
+
+def test_smartphone_color():
+    smartphone = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
+                             "S23 Ultra", 256, "Серый")
+    assert smartphone.color == "Серый"  # Проверяем цвет устройства
+
+def test_lawn_grass_country():
+    grass = LawnGrass("Газонная трава", "Описание", 1500, 30, "Россия", 14, "зеленый")
+    assert grass.country == "Россия"  # Проверяем страну происхождения
+
+# Не забудьте оставить существующие тесты
 def test_product_setter_price_negative():
     product = Product("Товар", "Описание товара", 100.0, 10)
     product.price = -50  # Устанавливаем отрицательную цену
