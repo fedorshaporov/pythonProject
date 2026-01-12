@@ -53,7 +53,7 @@ def test_lawn_grass_country():
     grass = LawnGrass("Газонная трава", "Описание", 1500, 30, "Россия", 14, "зеленый")
     assert grass.country == "Россия"  # Проверяем страну происхождения
 
-# Не забудьте оставить существующие тесты
+# Тесты предыдущие
 def test_product_setter_price_negative():
     product = Product("Товар", "Описание товара", 100.0, 10)
     product.price = -50  # Устанавливаем отрицательную цену
