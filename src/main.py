@@ -16,6 +16,8 @@ class LoggingMixin:
 
 class Product(BaseProduct, LoggingMixin):
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         LoggingMixin.__init__(self, name, description, price, quantity)  # Инициализация миксина
         self.name = name
         self.description = description
@@ -87,6 +89,13 @@ class Category:
             raise TypeError("Можно добавлять только объекты классов Product или его наследников.")
         self._products.append(product)
         Category.product_count += 1  # Увеличиваем количество продуктов при добавлении
+
+    def average_price(self):
+        try:
+            total_price = sum(product.price for product in self._products)
+            return total_price / len(self._products)
+        except ZeroDivisionError:
+            return 0  # Вернуть 0, если нет продуктов
 
     @property
     def products(self):
