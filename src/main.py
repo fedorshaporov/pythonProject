@@ -16,7 +16,7 @@ class LoggingMixin:
 
 class Product(BaseProduct, LoggingMixin):
     def __init__(self, name: str, description: str, price: float, quantity: int):
-        if quantity == 0:
+        if quantity <= 0:
             raise ValueError("Товар с нулевым количеством не может быть добавлен")
         LoggingMixin.__init__(self, name, description, price, quantity)  # Инициализация миксина
         self.name = name
