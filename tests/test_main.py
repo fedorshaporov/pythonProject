@@ -1,6 +1,42 @@
 import pytest
 from src.main import Product, Smartphone, LawnGrass, Category
 
+
+# Тест для проверки бросаемого исключения при создании товара с нулевым количеством
+def test_product_creation_zero_quantity():
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Товар", "Описание товара", 100.0, 0)  # Создание с нулевым количеством
+
+# Тест для проверки среднего ценника в категории
+def test_category_average_price_no_products():
+    category = Category("Тестовая категория", "Тестовое описание")
+    assert category.average_price() == 0  # Проверяем, что возвращается 0
+
+def test_category_average_price_with_products():
+    category = Category("Тестовая категория", "Тестовое описание")
+    product1 = Product("Товар 1", "Описание товара 1", 100.0, 5)
+    product2 = Product("Товар 2", "Описание товара 2", 200.0, 3)
+    category.add_product(product1)
+    category.add_product(product2)
+
+    expected_average = (100.0 + 200.0) / 2
+    assert category.average_price() == expected_average  # Проверяем среднюю цену
+
+# Тест для проверки бросаемого исключения при создании товара с отрицательным количеством
+def test_product_creation_negative_quantity():
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Товар", "Описание товара", 100.0, -5)  # Создание с отрицательным количеством
+
+# Тест на добавление товар в категорию и проверка общего количества
+def test_category_add_and_total_products():
+    category = Category("Электроника", "Описание")
+    product1 = Product("Товар 1", "Описание товара 1", 100.0, 5)
+    product2 = Product("Товар 2", "Описание товара 2", 200.0, 3)
+    category.add_product(product1)
+    category.add_product(product2)
+
+    assert len(category._products) == 2  # Убедитесь, что товары добавлены
+
 def test_product_creation():
     product = Product("Товар", "Описание товара", 100.0, 10)
     assert product.name == "Товар"
@@ -8,7 +44,7 @@ def test_product_creation():
     assert product.price == 100.0
     assert product.quantity == 10
 
-# Добавляем новые тесты
+
 def test_product_price_update():
     product = Product("Товар", "Описание товара", 100.0, 10)
     product.price = 150.0  # Обновляем цену
@@ -134,3 +170,9 @@ def test_main_logic():
     )
 
     assert category_smartphones.products.strip() == expected_output.strip()
+
+def test_product_str_method():
+    product = Product("Товар", "Описание товара", 100.0, 10)
+    expected_str = "Товар, 100.0 руб. Остаток: 10 шт."
+    assert str(product) == expected_str
+
