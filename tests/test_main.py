@@ -10,12 +10,12 @@ def test_product_creation():
 
 def test_product_setter_price_negative():
     product = Product("Товар", "Описание товара", 100.0, 10)
-    product.price = -50  # Установим отрицательную цену
+    product.price = -50  # Устанавливаем отрицательную цену
     assert product.price == 100.0  # Убедитесь, что цена не изменилась
 
 def test_product_setter_price_zero():
     product = Product("Товар", "Описание товара", 100.0, 10)
-    product.price = 0  # Установим нулевую цену
+    product.price = 0  # Устанавливаем нулевую цену
     assert product.price == 100.0  # Убедитесь, что цена не изменилась
 
 def test_smartphone_creation():
@@ -49,11 +49,12 @@ def test_category_add_product():
 def test_category_add_invalid_product():
     category = Category("Электроника", "Описание")
     with pytest.raises(TypeError):
-        category.add_product("Некорректный объект")  # Ожидаем ошибку при добавлении
+        category.add_product("Некорректный объект")  # Проверка на ошибку при добавлении
 
 def test_product_addition_and_sum():
     smartphone1 = Smartphone("Смартфон 1", "Описание 1", 20000, 5, 5, "Model X1", 128, "синий")
     smartphone2 = Smartphone("Смартфон 2", "Описание 2", 25000, 2, 8, "Model X2", 256, "черный")
+
     total_value = smartphone1 + smartphone2
     expected_value = (smartphone1.price * smartphone1.quantity) + (smartphone2.price * smartphone2.quantity)
     assert total_value == expected_value
@@ -61,14 +62,16 @@ def test_product_addition_and_sum():
 def test_product_addition_type_error():
     smartphone = Smartphone("Смартфон", "Описание", 20000, 5, 5, "Model X", 128, "синий")
     grass = LawnGrass("Газонная трава", "Описание", 1500, 30, "Россия", 14, "зеленый")
+
     with pytest.raises(TypeError):
-        smartphone + grass  # Ожидаем ошибку при попытке сложения разных типов
+        smartphone + grass  # Ожидаем ошибку при сложении разных типов
 
 def test_main_logic():
     """Тестирует работу логики в блоке if __name__ == '__main__'."""
     category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны")
 
-    smartphone1 = Smartphone("Samsung Galaxy S23", "256GB, Серый цвет", 180000.0, 5, 95.5, "S23", 256, "Серый")
+    smartphone1 = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
+                             "S23 Ultra", 256, "Серый")
     smartphone2 = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space")
     smartphone3 = Smartphone("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14, 90.3, "Note 11", 1024, "Синий")
 
@@ -76,17 +79,12 @@ def test_main_logic():
     category_smartphones.add_product(smartphone2)
     category_smartphones.add_product(smartphone3)
 
-    assert len(category_smartphones._products) == 3  # Убедитесь, что три продукта добавлены
+    assert len(category_smartphones._products) == 3  # Проверка добавленных продуктов
 
-    expected_products_string = (
+    expected_output = (
         f"{smartphone1.name}, {smartphone1.price} руб. Остаток: {smartphone1.quantity} шт.\n" +
         f"{smartphone2.name}, {smartphone2.price} руб. Остаток: {smartphone2.quantity} шт.\n" +
         f"{smartphone3.name}, {smartphone3.price} руб. Остаток: {smartphone3.quantity} шт."
     )
 
-    assert category_smartphones.products == expected_products_string.strip()  # Проверка выводимого
-
-    try:
-        category_smartphones.add_product("Not a product")  # Ожидаем ошибку при добавлении
-    except TypeError:
-        print("Возникла ошибка TypeError при попытке добавить не продукт.")
+    assert category_smartphones.products.strip() == expected_output.strip()

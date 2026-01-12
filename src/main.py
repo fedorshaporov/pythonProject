@@ -1,5 +1,22 @@
-class Product:
+from abc import ABC, abstractmethod
+
+
+class BaseProduct(ABC):
+    @abstractmethod
+    def __str__(self):
+        """Возвращает строковое представление продукта."""
+        pass
+
+
+class LoggingMixin:
+    def __init__(self, *args, **kwargs):
+        print(f"Создан объект: {self.__class__.__name__} с параметрами: {args}, {kwargs}")
+        # Здесь не вызываем super для object
+
+
+class Product(BaseProduct, LoggingMixin):
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        LoggingMixin.__init__(self, name, description, price, quantity)  # Инициализация миксина
         self.name = name
         self.description = description
         self._price = price  # Приватный атрибут
@@ -28,7 +45,7 @@ class Product:
 class Smartphone(Product):
     def __init__(self, name: str, description: str, price: float,
                  quantity: int, efficiency: float, model: str, memory: int, color: str):
-        super().__init__(name, description, price, quantity)
+        super().__init__(name, description, price, quantity)  # Вызов конструктора родительского класса
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
@@ -38,7 +55,7 @@ class Smartphone(Product):
 class LawnGrass(Product):
     def __init__(self, name: str, description: str, price: float,
                  quantity: int, country: str, germination_period: int, color: str):
-        super().__init__(name, description, price, quantity)
+        super().__init__(name, description, price, quantity)  # Вызов конструктора родительского класса
         self.country = country
         self.germination_period = germination_period
         self.color = color
@@ -48,10 +65,10 @@ class Category:
     category_count = 0  # Класс-атрибут для хранения количества категорий
     product_count = 0   # Класс-атрибут для хранения общего количества продуктов
 
-    def __init__(self, name: str, description: str, products: list = None):
+    def __init__(self, name: str, description: str):
         self.name = name
         self.description = description
-        self._products = products if products is not None else []
+        self._products = []  # Приватный атрибут
         Category.category_count += 1  # Увеличиваем количество категорий при создании новой
 
     def add_product(self, product: Product):
@@ -69,6 +86,7 @@ class Category:
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
 
+# Пример использования
 if __name__ == "__main__":
     smartphone1 = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
                              "S23 Ultra", 256, "Серый")
@@ -88,15 +106,12 @@ if __name__ == "__main__":
     category_grass.add_product(grass1)
     category_grass.add_product(grass2)
 
-    # Вывод общего количества категорий и продуктов
     print(f"Общее количество категорий: {Category.category_count}")
     print(f"Общее количество продуктов: {Category.product_count}")
 
-    # Вывод продуктов в категориях
     print(category_smartphones.products)
     print(category_grass.products)
 
-    # Проверка сложения
     smartphone_sum = smartphone1 + smartphone2
     print(smartphone_sum)
 
