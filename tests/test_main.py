@@ -1,5 +1,5 @@
 import pytest
-from src.main import Product, Smartphone, LawnGrass, Category  # Убедитесь, что путь верный
+from src.main import Product, Smartphone, LawnGrass, Category
 
 def test_product_creation():
     product = Product("Товар", "Описание товара", 100.0, 10)
